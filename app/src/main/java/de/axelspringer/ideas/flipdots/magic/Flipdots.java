@@ -1,11 +1,43 @@
 package de.axelspringer.ideas.flipdots.magic;
 
+import jssc.SerialPort;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * flipdot display
+ * <p>
+ * 0:1200
+ * 1:2400
+ * 2:4800
+ * 3:9600<---this should be set,means 1-ON 2-ON 3-OFF
+ * 4:19200
+ * 5:38200<--do not use,most probably wrong speed programmed
+ * 6:9600
+ * 7:9600
+ * 8:9600
+ * <p>
+ * 0x80beginning
+ * ___________________
+ * 0x81 - 112bytes/no refresh/C+3E
+ * 0x82 - refresh
+ * 0x83 - 28bytes of data/refresh/2C
+ * 0x84 - 28bytes of data/no refresh/2C
+ * 0x85 - 56bytes of data/refresh/C+E
+ * 0x86 - 56bytes of data/no refresh/C+E
+ * ---------------------------------------
+ * address or 0xFF for all
+ * data...1to number of data buytes
+ * 0x8Fend
+ */
 public class Flipdots {
 
     Map<Character, byte[]> font = new HashMap<>();
+
+    private SerialPort serialPort;
 
     public Flipdots() {
         font.put(' ', new byte[]{0});
@@ -47,6 +79,37 @@ public class Flipdots {
         font.put('X', new byte[]{0x36, 0x08, 0x08, 0x36});
         font.put('Y', new byte[]{0x2E, 0x28, 0x28, 0x1E});
         font.put('Z', new byte[]{0x32, 0x2A, 0x2A, 0x26});
+    }
+
+
+    public void writeToBoard(String letters) {
+
+    }
+
+    private byte[] convertToByteArray(String letters) {
+
+    }
+
+    private void openConnection() {
+        SerialPort serialPort = new SerialPort(portName());
+        try {
+            serialPort.openPort();//Open serial port
+            serialPort.setParams(SerialPort.BAUDRATE_9600,
+                    SerialPort.DATABITS_8,
+                    SerialPort.STOPBITS_1,
+                    SerialPort.PARITY_NONE);//Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
+            serialPort.writeBytes("This is a test string".getBytes());
+            serialPort.closePort();
+        } catch (SerialPortException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    private String portName() {
+        String[] portNames = SerialPortList.getPortNames();
+        for (String portName : portNames) {
+
+        }
     }
 
 }
