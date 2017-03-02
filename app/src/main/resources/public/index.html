@@ -2,11 +2,111 @@
 <html>
 <head>
     <title>Flipdots App</title>
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/metro-bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css">
+
+    <script src="/js/jquery.min.js"></script>
+
+    <style>
+        body {
+            text-align: center;
+        }
+
+        .l-main {
+            max-width: 960px;
+            margin-top: 20vh;
+        }
+
+        .l-flipdot-container {
+            margin-top: 20px;
+        }
+
+        .flipdot-col {
+            display: inline-block;
+        }
+
+        .flipdot {
+            width: 20px;
+            height: 20px;
+            background: #303030;
+            margin: 3px 3px;
+        }
+
+        .flipdot.selected {
+            background: #e3e88c;
+        }
+    </style>
 </head>
+
+
 <body>
-<h1>Hello Worlds</h1>
-<h2>-_-</h2>
+<div class='l-main'>
+    <div>
+        <h1>Flipdots</h1>
+    </div>
+    <input id='textInput' value='Hello World!'/>
+    <button onclick='sendText()'>Send text</button>
+</div>
+
+<div class='divider'></div>
+
+<div class='l-flipdot-container'>
+</div>
+<button onclick='sendPattern()'>Send pattern</button>
+
+<div id='errorDiv'></div>
 </body>
+
+<script>
+    $(new function () {
+        console.info("INIT");
+
+        var colsOfDots = 28;
+        var rowsOfDots = 7;
+        var flipdotContainer = $('.l-flipdot-container');
+
+        for (var i = 0; i < colsOfDots; i++) {
+            flipdotContainer.append('<div class="flipdot-col"></div>');
+        }
+
+        for (var i = 0; i < rowsOfDots; i++) {
+            $('.flipdot-col').append('<div class="flipdot"></div>');
+        }
+
+        $('.flipdot').click(invertDot);
+    });
+
+    function handleError(error) {
+        $('#errorDiv').append(JSON.stringify(error));
+    }
+
+    function invertDot(e) {
+        $(e.target).toggleClass("selected");
+    }
+
+    function sendText() {
+        $.post('api/v1/write/text/' + $('#textInput').val())
+            .done(function (data) {
+                console.info('SUCCESS');
+            })
+            .fail(function (error) {
+                handleError(error);
+            });
+    }
+
+    function getEncodedPattern() {
+
+    }
+
+    function sendPattern() {
+        $.post('api/v1/write/bin/' + getEncodedPattern())
+            .done(function (data) {
+                console.info('SUCCESS');
+            })
+            .fail(function (error) {
+                handleError(error);
+            });
+    }
+</script>
 </html>

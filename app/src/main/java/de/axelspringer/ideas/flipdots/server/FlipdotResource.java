@@ -2,9 +2,7 @@ package de.axelspringer.ideas.flipdots.server;
 
 import de.axelspringer.ideas.flipdots.magic.Flipdots;
 
-//import static spark.Spark.get;
-//import static spark.Spark.post;
-//import static spark.Spark.put;
+import static spark.Spark.post;
 
 public class FlipdotResource {
 
@@ -18,23 +16,17 @@ public class FlipdotResource {
     }
 
     private void setupEndpoints() {
-//        post(API_CONTEXT + "/todos", "application/json", (request, response) -> {
-//            todoService.createNewTodo(request.body());
-//            response.status(201);
-//            return response;
-//        }, new JsonTransformer());
-//
-//        get(API_CONTEXT + "/todos/:id", "application/json", (request, response)
-//
-//                -> todoService.find(request.params(":id")), new JsonTransformer());
-//
-//        get(API_CONTEXT + "/todos", "application/json", (request, response)
-//
-//                -> todoService.findAll(), new JsonTransformer());
-//
-//        put(API_CONTEXT + "/todos/:id", "application/json", (request, response)
-//
-//                -> todoService.update(request.params(":id"), request.body()), new JsonTransformer());
+        post(API_CONTEXT + "/write/text/:text", "application/json", (request, response) -> {
+            flipdots.writeText(request.params(":text"));
+            response.status(201);
+            return response;
+        }, new JsonTransformer());
+
+        post(API_CONTEXT + "/write/bin/:bin", "application/json", (request, response) -> {
+            flipdots.writeBin(request.params(":bin"));
+            response.status(201);
+            return response;
+        }, new JsonTransformer());
     }
 
 

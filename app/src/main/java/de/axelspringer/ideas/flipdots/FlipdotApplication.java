@@ -1,6 +1,7 @@
 package de.axelspringer.ideas.flipdots;
 
-import spark.Spark;
+import de.axelspringer.ideas.flipdots.magic.Flipdots;
+import de.axelspringer.ideas.flipdots.server.FlipdotResource;
 
 import static spark.Spark.exception;
 import static spark.Spark.setPort;
@@ -14,8 +15,7 @@ public class FlipdotApplication {
         setPort(PORT);
         staticFileLocation("/public");
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
-        // Render main UI
-        Spark.get("/hello", (req, res) -> "Hello World");
+        new FlipdotResource(new Flipdots());
     }
 
 }

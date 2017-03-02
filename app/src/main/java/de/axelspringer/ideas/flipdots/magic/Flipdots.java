@@ -82,12 +82,18 @@ public class Flipdots {
     }
 
 
-    public void writeToBoard(String letters) {
+    public void writeBin(String params) {
+        // FIXME Remove System.out
+        System.out.println("Flipdots.writeBin " + params);
+    }
 
+    public void writeText(String params) {
+// FIXME Remove System.out
+        System.out.println("Flipdots.writeText " + params);
     }
 
     private byte[] convertToByteArray(String letters) {
-
+        return null;
     }
 
     private void openConnection() {
@@ -108,8 +114,10 @@ public class Flipdots {
     private String portName() {
         String[] portNames = SerialPortList.getPortNames();
         for (String portName : portNames) {
-
+            return portName;
         }
+        return null;
     }
+
 
 }
