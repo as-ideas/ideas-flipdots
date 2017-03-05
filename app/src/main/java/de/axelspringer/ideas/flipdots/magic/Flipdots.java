@@ -46,6 +46,7 @@ public class Flipdots {
 
     private Map<Character, Integer[]> font = new HashMap<>();
     private SerialPort serialPort;
+    private Long timePerFrame = DEFAULT_FRAME_DURATION_IN_MS;
 
     public Flipdots() {
         font.put(' ', new Integer[]{0});
@@ -92,6 +93,18 @@ public class Flipdots {
 
     public void writeBin(String params) {
         LOG.info("Flipdots.writeBin " + params);
+        String[] split = params.split("-");
+        Integer[] values = new Integer[split.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i] = Integer.valueOf(split[i]);
+        }
+
+        FlipdotFrame flipdotFrame = new FlipdotFrame();
+        for (int i = 0; i < split.length; i++) {
+            flipdotFrame.appendSimple(values);
+        }
+        write(flipdotFrame);
+        sleep();
     }
 
     public void writeText(String params) {
@@ -155,7 +168,7 @@ public class Flipdots {
 
     private void sleep() {
         try {
-            Thread.sleep(DEFAULT_FRAME_DURATION_IN_MS);
+            Thread.sleep(timePerFrame);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -170,4 +183,7 @@ public class Flipdots {
     }
 
 
+    public void setTimePerFrame(long i) {
+        this.timePerFrame = i;
+    }
 }

@@ -14,8 +14,15 @@
         }
 
         .l-main {
+            margin: auto;
             max-width: 960px;
             margin-top: 20vh;
+        }
+
+        #textInput {
+            width: 50vw;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
 
         .l-flipdot-container {
@@ -36,6 +43,11 @@
         .flipdot.selected {
             background: #e3e88c;
         }
+
+        .flipdot-col-value {
+            font-size: 10px;
+            font-weight: 200;
+        }
     </style>
 </head>
 
@@ -47,6 +59,10 @@
     </div>
     <input id='textInput' value='Hello World!'/>
     <button onclick='sendText()'>Send text</button>
+    <br/>
+    <input id='speedInput'/>
+    <button onclick='sendSpeed()'>Set time per Frame in ms</button>
+
 </div>
 
 <div class='divider'></div>
@@ -61,19 +77,25 @@
 <script>
     $(new function () {
         console.info("INIT");
+//        console.info(0 << 1);
+//        console.info(0 << 2);
+//        console.info(0 << 3);
+//        console.info(1 << 2);
 
         var colsOfDots = 28;
         var rowsOfDots = 7;
         var flipdotContainer = $('.l-flipdot-container');
 
         for (var i = 0; i < colsOfDots; i++) {
-            flipdotContainer.append('<div class="flipdot-col"></div>');
+            flipdotContainer.append('<div class="flipdot-col flipdot-col-' + i + '"></div>');
         }
 
         for (var i = 0; i < rowsOfDots; i++) {
-            $('.flipdot-col').append('<div class="flipdot"></div>');
+            $('.flipdot-col').append('<div class="flipdot flipdot-' + i + '"></div>');
         }
 
+        $('.flipdot-col').append('<div class="flipdot-col-value flipdot-col-hex-value">00</div>');
+        $('.flipdot-col').append('<div class="flipdot-col-value flipdot-col-dec-value">0</div>');
         $('.flipdot').click(invertDot);
     });
 
@@ -81,23 +103,64 @@
         $('#errorDiv').append(JSON.stringify(error));
     }
 
+    function hexValue(integerValue) {
+        var temp = integerValue.toString(16);
+        if (temp.length % 2 != 0) {
+            temp = "0" + temp;
+        }
+        return temp;
+    }
+
+
     function invertDot(e) {
-        $(e.target).toggleClass("selected");
+        var dot = $(e.target);
+        var binary = 0;
+        dot.toggleClass("selected");
+        var flipdotColumn = dot.parent();
+        var flipdots = flipdotColumn.find('.flipdot');
+        for (var i = 0; i < flipdots.length; i++) {
+            var flipdot = $(flipdots[i]);
+            var isSelected = flipdot.hasClass("selected");
+            binary = binary | (isSelected << i);
+        }
+        $(flipdotColumn.find(".flipdot-col-hex-value")).text(hexValue(binary));
+        $(flipdotColumn.find(".flipdot-col-dec-value")).text(binary);
+    }
+
+    function getEncodedPattern() {
+        var fullPattern = "";
+        var allValues = $(".flipdot-col-dec-value");
+        for (var i = 0; i < allValues.length; i++) {
+            var value = $(allValues[i]).text();
+            console.info(value);
+            if (i != 0) {
+                fullPattern += "_";
+            }
+            fullPattern += value;
+        }
+        return fullPattern;
     }
 
     function sendText() {
         $.post('api/v1/write/text/' + $('#textInput').val())
             .done(function (data) {
-                console.info('SUCCESS');
+                console.info('SUCCESS sending text');
             })
             .fail(function (error) {
                 handleError(error);
             });
     }
 
-    function getEncodedPattern() {
-
+    function sendSpeed() {
+        $.post('api/v1/config/time_per_frame/' + $('#speedInput').val())
+            .done(function (data) {
+                console.info('SUCCESS setting speed');
+            })
+            .fail(function (error) {
+                handleError(error);
+            });
     }
+
 
     function sendPattern() {
         $.post('api/v1/write/bin/' + getEncodedPattern())
