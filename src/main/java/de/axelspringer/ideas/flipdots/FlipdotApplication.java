@@ -2,6 +2,7 @@ package de.axelspringer.ideas.flipdots;
 
 import de.axelspringer.ideas.flipdots.magic.Flipdots;
 import de.axelspringer.ideas.flipdots.server.FlipdotResource;
+import org.eclipse.jetty.util.StringUtil;
 
 import static spark.Spark.exception;
 import static spark.Spark.setPort;
@@ -19,10 +20,18 @@ public class FlipdotApplication {
     }
 
     private static void setupWebServer() {
-        setPort(PORT);
+        setPort(getPort());
         staticFileLocation("/public");
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         new FlipdotResource(flipdots);
+    }
+
+    private static int getPort() {
+        String property = System.getProperty("server.port");
+        if (StringUtil.isNotBlank(property)) {
+            return Integer.valueOf(property);
+        }
+        return PORT;
     }
 
     private static void addShutdownHook() {
