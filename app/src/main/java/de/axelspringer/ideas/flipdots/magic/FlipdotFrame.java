@@ -17,10 +17,10 @@ public class FlipdotFrame {
     }
 
     public void shiftLeft() {
-        frame[30] = 0;
-        for (int i = 29; i > 2; i--) {
+        for (int i = 3; i <= 29; i++) {
             frame[i] = frame[i + 1];
         }
+//        frame[30] = 0;
     }
 
     public void appendOnLastColumn(Integer oneCol) {

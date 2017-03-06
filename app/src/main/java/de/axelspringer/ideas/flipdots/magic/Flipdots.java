@@ -6,6 +6,8 @@ import jssc.SerialPortList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 public class Flipdots {
 
     private static final Logger LOG = LoggerFactory.getLogger(Flipdots.class);
-    private static final long DEFAULT_FRAME_DURATION_IN_MS = TimeUnit.MILLISECONDS.toMillis(750);
+    private static final long DEFAULT_FRAME_DURATION_IN_MS = TimeUnit.MILLISECONDS.toMillis(280);
 
     private Map<Character, Integer[]> font = new HashMap<>();
     private SerialPort serialPort;
@@ -73,14 +75,14 @@ public class Flipdots {
         font.put('J', new Integer[]{0x10, 0x20, 0x20, 0x1E});
         font.put('K', new Integer[]{0x3E, 0x08, 0x14, 0x22});
         font.put('L', new Integer[]{0x3E, 0x20, 0x20});
-        font.put('M', new Integer[]{0x3E, 0x04, 0x08, 0x04});
+        font.put('M', new Integer[]{0x3E, 0x04, 0x08, 0x04, 0x3E});
         font.put('N', new Integer[]{0x3E, 0x04, 0x08, 0x3E});
         font.put('O', new Integer[]{0x1C, 0x22, 0x22, 0x1C});
         font.put('P', new Integer[]{0x3E, 0x0A, 0x0A, 0x1C, 0x04});
         font.put('Q', new Integer[]{0x1C, 0x22, 0x12, 0x2C});
         font.put('R', new Integer[]{0x3E, 0x0A, 0x1A, 0x24});
         font.put('S', new Integer[]{0x24, 0x2A, 0x2A, 0x12});
-        font.put('T', new Integer[]{0x02, 0x02, 0x3E, 0x02, 0x02});
+        font.put('T', new Integer[]{0x02, 0x3E, 0x02});
         font.put('U', new Integer[]{0x1E, 0x20, 0x20, 0x1E});
         font.put('V', new Integer[]{0x06, 0x18, 0x20, 0x18, 0x6});
         font.put('W', new Integer[]{0x1E, 0x20, 0x1E, 0x20, 0x1E});
@@ -95,14 +97,21 @@ public class Flipdots {
     }
 
     public void writeText(String params) {
+        try {
+            params = URLDecoder.decode(params, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         LOG.info("Flipdots.writeText " + params);
 
         List<Integer> data = new ArrayList<>();
-        for (char c : params.toCharArray()) {
+        for (char c : params.toUpperCase().toCharArray()) {
             data.addAll(Arrays.asList(font.get(c)));
+            data.add(0);
         }
 
         FlipdotFrame flipdotFrame = new FlipdotFrame();
+        write(flipdotFrame);
 
         for (Integer oneCol : data) {
             flipdotFrame.shiftLeft();
