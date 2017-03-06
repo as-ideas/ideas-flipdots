@@ -100,7 +100,7 @@
     });
 
     function handleError(error) {
-        $('#errorDiv').append(JSON.stringify(error));
+        $('#errorDiv').append('<pre>' + JSON.stringify(error) + '</pre>');
     }
 
     function hexValue(integerValue) {
