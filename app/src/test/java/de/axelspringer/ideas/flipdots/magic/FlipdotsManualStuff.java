@@ -6,7 +6,7 @@ import jssc.SerialPortException;
 import jssc.SerialPortList;
 import org.junit.Test;
 
-public class FlipdotsTest {
+public class FlipdotsManualStuff {
 
     @Test
     public void listSerialPorts() throws Exception {
