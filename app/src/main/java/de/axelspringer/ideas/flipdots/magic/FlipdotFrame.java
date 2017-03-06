@@ -26,4 +26,10 @@ public class FlipdotFrame {
     public void appendOnLastColumn(Integer oneCol) {
         frame[30] = oneCol;
     }
+
+    public void appendSimple(Integer[] values) {
+        for (int i = 0; i <= 28; i++) {
+            frame[2 + i] = values[0];
+        }
+    }
 }
