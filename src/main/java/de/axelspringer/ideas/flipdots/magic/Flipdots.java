@@ -51,6 +51,10 @@ public class Flipdots {
     private Long timePerFrame = DEFAULT_FRAME_DURATION_IN_MS;
 
     public Flipdots() {
+        for (String portName : SerialPortList.getPortNames()) {
+            LOG.info("Found serial port: " + portName);
+        }
+
         font.put(' ', new Integer[]{0});
         font.put('+', new Integer[]{24, 126, 126, 24, 0});
         font.put('-', new Integer[]{24, 24, 24, 24, 0});
@@ -185,10 +189,21 @@ public class Flipdots {
 
     private String portName() {
         String[] portNames = SerialPortList.getPortNames();
-        for (String portName : portNames) {
-            return portName;
+        if (portNames == null || portNames.length == 0) {
+            throw new RuntimeException("No SERIAL PORT was found!");
         }
-        return null;
+        if (portNames != null && portNames.length == 1) {
+            return portNames[0];
+        }
+
+
+        String result = portNames[0];
+        for (String portName : portNames) {
+            if (portName.contains("usbserial")) {
+                result = portName;
+            }
+        }
+        return result;
     }
 
 
