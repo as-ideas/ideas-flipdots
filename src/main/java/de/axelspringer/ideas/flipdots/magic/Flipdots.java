@@ -99,18 +99,23 @@ public class Flipdots {
 
     public void writeBin(String params) {
         LOG.info("Flipdots.writeBin " + params);
-        String[] split = params.split("-");
-        Integer[] values = new Integer[split.length];
-        for (int i = 0; i < values.length; i++) {
-            values[i] = Integer.valueOf(split[i]);
-        }
+        Integer[] values = parseBinaryPatternString(params);
 
         FlipdotFrame flipdotFrame = new FlipdotFrame();
-        for (int i = 0; i < split.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             flipdotFrame.appendSimple(values);
         }
         write(flipdotFrame);
         sleep();
+    }
+
+    Integer[] parseBinaryPatternString(String params) {
+        String[] split = params.split("_");
+        Integer[] values = new Integer[split.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i] = Integer.valueOf(split[i]);
+        }
+        return values;
     }
 
     public void writeText(String params) {
