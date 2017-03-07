@@ -123,7 +123,12 @@ public class Flipdots {
 
         List<Integer> data = new ArrayList<>();
         for (char c : params.toUpperCase().toCharArray()) {
-            data.addAll(Arrays.asList(font.get(c)));
+            Integer[] a = font.get(c);
+            if (a != null) {
+                data.addAll(Arrays.asList(a));
+            } else {
+                LOG.warn("Char not found: " + c);
+            }
             data.add(0);
         }
 
