@@ -94,6 +94,8 @@ public class Flipdots {
         font.put('X', new Integer[]{0x36, 0x08, 0x08, 0x36});
         font.put('Y', new Integer[]{0x2E, 0x28, 0x28, 0x1E});
         font.put('Z', new Integer[]{0x32, 0x2A, 0x2A, 0x26});
+
+        new Thread(() -> write(new FlipdotFrame())).start();
     }
 
 
@@ -106,7 +108,6 @@ public class Flipdots {
             flipdotFrame.appendSimple(values);
         }
         write(flipdotFrame);
-        sleep();
     }
 
     Integer[] parseBinaryPatternString(String params) {
@@ -118,7 +119,7 @@ public class Flipdots {
         return values;
     }
 
-    public void writeText(String params) {
+    public synchronized void writeText(String params) {
         try {
             params = URLDecoder.decode(params, "UTF-8");
         } catch (UnsupportedEncodingException e) {
