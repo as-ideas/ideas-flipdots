@@ -188,7 +188,13 @@ public class Flipdots {
 
         List<FlipdotBigByte> data = new ArrayList<>();
         for (char c : params.toUpperCase().toCharArray()) {
-            data.addAll(Arrays.asList(bigFont.get(c)));
+            FlipdotBigByte[] a = bigFont.get(c);
+            if (a != null) {
+                data.addAll(Arrays.asList(a));
+            } else {
+                LOG.warn("Char not found: " + c);
+            }
+
             data.add(FlipdotBigByte.SPACE);
         }
 

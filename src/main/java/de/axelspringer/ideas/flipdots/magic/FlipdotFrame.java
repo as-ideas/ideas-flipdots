@@ -12,6 +12,12 @@ public class FlipdotFrame {
         frame[31] = 0x8F; // END
     }
 
+    public static FlipdotFrame forAddress(int a) {
+        FlipdotFrame flipdotFrame = new FlipdotFrame();
+        flipdotFrame.setAddress(a);
+        return flipdotFrame;
+    }
+
     public void setAddress(int a) {
         frame[2] = a;
     }

@@ -6,8 +6,8 @@ public class FlipdotBigFrame {
     public FlipdotFrame lowerFrame = new FlipdotFrame();
 
     public FlipdotBigFrame() {
-        upperFrame.setAddress(1);
-        lowerFrame.setAddress(2);
+        upperFrame.setAddress(0x01);
+        lowerFrame.setAddress(0x02);
     }
 
 
@@ -18,7 +18,7 @@ public class FlipdotBigFrame {
 
     public void appendOnLastColumn(FlipdotBigByte oneCol) {
         upperFrame.appendOnLastColumn(oneCol.upper);
-        upperFrame.appendOnLastColumn(oneCol.lower);
+        lowerFrame.appendOnLastColumn(oneCol.lower);
     }
 //
 //    public void appendSimple(Integer[] values) {
