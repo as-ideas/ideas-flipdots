@@ -47,6 +47,7 @@ public class Flipdots {
     private static final long DEFAULT_FRAME_DURATION_IN_MS = TimeUnit.MILLISECONDS.toMillis(280);
 
     private Map<Character, Integer[]> font = new HashMap<>();
+    private Map<Character, FlipdotBigByte[]> bigFont = new HashMap<>();
     private SerialPort serialPort;
     private Long timePerFrame = DEFAULT_FRAME_DURATION_IN_MS;
 
@@ -90,6 +91,33 @@ public class Flipdots {
         font.put('X', new Integer[]{0x36, 0x08, 0x08, 0x36});
         font.put('Y', new Integer[]{0x2E, 0x28, 0x28, 0x1E});
         font.put('Z', new Integer[]{0x32, 0x2A, 0x2A, 0x26});
+
+        bigFont.put('A', bigFontArray(intA(0, 112, 120, 28, 14, 7, 7, 14, 28, 120, 112, 0), intA(0, 127, 127, 6, 6, 6, 6, 6, 6, 127, 127, 0)));
+        bigFont.put('B', bigFontArray(intA(0, 127, 127, 67, 67, 67, 67, 67, 103, 126, 60, 0), intA(0, 127, 127, 97, 97, 97, 97, 97, 115, 63, 30, 0)));
+        bigFont.put('C', bigFontArray(intA(0, 124, 126, 7, 3, 3, 3, 3, 7, 14, 12, 0), intA(0, 31, 63, 112, 96, 96, 96, 96, 112, 56, 24, 0)));
+        bigFont.put('D', bigFontArray(intA(0, 127, 127, 3, 3, 3, 3, 3, 7, 126, 124, 0), intA(0, 127, 127, 96, 96, 96, 96, 96, 112, 63, 31, 0)));
+        bigFont.put('E', bigFontArray(intA(0, 127, 127, 67, 67, 67, 67, 67, 67, 3, 3, 0), intA(0, 127, 127, 97, 97, 97, 97, 97, 97, 96, 96, 0)));
+        bigFont.put('F', bigFontArray(intA(0, 127, 127, 67, 67, 67, 67, 67, 67, 3, 3, 0), intA(0, 127, 127, 1, 1, 1, 1, 1, 1, 0, 0, 0)));
+        bigFont.put('G', bigFontArray(intA(0, 124, 126, 7, 3, 3, 67, 67, 71, 78, 76, 0), intA(0, 31, 63, 112, 96, 96, 97, 97, 113, 63, 31, 0)));
+        bigFont.put('H', bigFontArray(intA(0, 127, 127, 64, 64, 64, 64, 64, 64, 127, 127, 0), intA(0, 127, 127, 1, 1, 1, 1, 1, 1, 127, 127, 0)));
+        bigFont.put('I', bigFontArray(intA(0, 0, 0, 3, 3, 127, 127, 3, 3, 0, 0, 0), intA(0, 0, 0, 96, 96, 127, 127, 96, 96, 0, 0, 0)));
+        bigFont.put('J', bigFontArray(intA(0, 0, 0, 0, 0, 3, 3, 127, 127, 3, 3, 0), intA(0, 24, 56, 112, 96, 96, 112, 63, 31, 0, 0, 0)));
+        bigFont.put('K', bigFontArray(intA(0, 127, 127, 64, 96, 112, 56, 28, 14, 7, 3, 0), intA(0, 127, 127, 1, 3, 7, 14, 28, 56, 112, 96, 0)));
+        bigFont.put('L', bigFontArray(intA(0, 127, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0), intA(0, 127, 127, 96, 96, 96, 96, 96, 96, 96, 96, 0)));
+        bigFont.put('M', bigFontArray(intA(0, 127, 127, 28, 56, 112, 112, 56, 28, 127, 127, 0), intA(0, 127, 127, 0, 0, 1, 1, 0, 0, 127, 127, 0)));
+        bigFont.put('N', bigFontArray(intA(0, 127, 127, 56, 112, 96, 64, 0, 0, 127, 127, 0), intA(0, 127, 127, 0, 0, 1, 3, 7, 14, 127, 127, 0)));
+        bigFont.put('O', bigFontArray(intA(0, 124, 126, 7, 3, 3, 3, 3, 7, 126, 124, 0), intA(0, 31, 63, 112, 96, 96, 96, 96, 112, 63, 31, 0)));
+        bigFont.put('P', bigFontArray(intA(0, 127, 127, 67, 67, 67, 67, 67, 103, 126, 60, 0), intA(0, 127, 127, 1, 1, 1, 1, 1, 1, 0, 0, 0)));
+        bigFont.put('Q', bigFontArray(intA(0, 124, 126, 7, 3, 3, 3, 3, 7, 126, 124, 0), intA(0, 31, 63, 112, 96, 102, 110, 60, 56, 127, 111, 0)));
+        bigFont.put('R', bigFontArray(intA(0, 127, 127, 67, 67, 67, 67, 67, 103, 126, 60, 0), intA(0, 127, 127, 1, 3, 7, 15, 29, 57, 112, 96, 0)));
+        bigFont.put('S', bigFontArray(intA(0, 60, 126, 103, 67, 67, 67, 67, 71, 14, 12, 0), intA(0, 24, 56, 113, 97, 97, 97, 97, 115, 63, 30, 0)));
+        bigFont.put('T', bigFontArray(intA(0, 3, 3, 3, 3, 127, 127, 3, 3, 3, 3, 0), intA(0, 0, 0, 0, 0, 127, 127, 0, 0, 0, 0, 0)));
+        bigFont.put('U', bigFontArray(intA(0, 127, 127, 0, 0, 0, 0, 0, 0, 127, 127, 0), intA(0, 31, 63, 112, 96, 96, 96, 96, 112, 63, 31, 0)));
+        bigFont.put('V', bigFontArray(intA(0, 127, 127, 0, 0, 0, 0, 0, 0, 127, 127, 0), intA(0, 7, 15, 28, 56, 112, 112, 56, 28, 15, 7, 0)));
+        bigFont.put('W', bigFontArray(intA(0, 127, 127, 0, 0, 64, 64, 0, 0, 127, 127, 0), intA(0, 31, 63, 112, 112, 63, 63, 112, 112, 63, 31, 0)));
+        bigFont.put('X', bigFontArray(intA(0, 15, 31, 56, 112, 96, 96, 112, 56, 31, 15, 0), intA(0, 120, 124, 14, 7, 3, 3, 7, 14, 124, 120, 0)));
+        bigFont.put('Y', bigFontArray(intA(0, 63, 127, 96, 64, 0, 0, 64, 96, 127, 63, 0), intA(0, 0, 0, 1, 3, 127, 127, 3, 1, 0, 0, 0)));
+        bigFont.put('Z', bigFontArray(intA(0, 3, 3, 3, 3, 67, 99, 115, 59, 31, 15, 0), intA(0, 120, 124, 110, 103, 99, 97, 96, 96, 96, 96, 0)));
     }
 
 
@@ -115,7 +143,7 @@ public class Flipdots {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        LOG.info("Flipdots.writeText " + params);
+        LOG.info("Flipdots.writeText:  " + params);
 
         List<Integer> data = new ArrayList<>();
         for (char c : params.toUpperCase().toCharArray()) {
@@ -132,6 +160,38 @@ public class Flipdots {
             write(flipdotFrame);
             sleep();
         }
+
+    }
+
+    public void writeBigText(String params) {
+        try {
+            params = URLDecoder.decode(params, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        LOG.info("Flipdots.writeBigText " + params);
+
+        List<FlipdotBigByte> data = new ArrayList<>();
+        for (char c : params.toUpperCase().toCharArray()) {
+            data.addAll(Arrays.asList(bigFont.get(c)));
+            data.add(FlipdotBigByte.SPACE);
+        }
+
+        FlipdotBigFrame flipdotFrame = new FlipdotBigFrame();
+        write(flipdotFrame);
+
+        for (FlipdotBigByte oneCol : data) {
+            flipdotFrame.shiftLeft();
+            flipdotFrame.appendOnLastColumn(oneCol);
+            write(flipdotFrame);
+            sleep();
+        }
+
+    }
+
+    private void write(FlipdotBigFrame flipdotFrame) {
+        write(flipdotFrame.upperFrame);
+        write(flipdotFrame.lowerFrame);
 
     }
 
@@ -194,5 +254,22 @@ public class Flipdots {
 
     public void setTimePerFrame(long i) {
         this.timePerFrame = i;
+    }
+
+    private FlipdotBigByte[] bigFontArray(int[] upper, int[] lower) {
+        if (upper.length != lower.length) {
+            throw new IllegalStateException("Length of upper and lower must be the same! Upper:" + upper + ", lower:" + lower);
+        }
+
+        FlipdotBigByte[] result = new FlipdotBigByte[upper.length];
+        for (int i = 0; i < upper.length; i++) {
+            result[i] = new FlipdotBigByte(upper[i], lower[i]);
+        }
+
+        return result;
+    }
+
+    private int[] intA(int... values) {
+        return values;
     }
 }

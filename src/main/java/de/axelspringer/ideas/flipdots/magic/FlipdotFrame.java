@@ -12,6 +12,11 @@ public class FlipdotFrame {
         frame[31] = 0x8F; // END
     }
 
+    public void setAddress(int a) {
+        frame[2] = a;
+    }
+
+
     public int[] getFrame() {
         return frame;
     }

@@ -25,7 +25,7 @@
             margin-bottom: 20px;
         }
 
-        .l-flipdot-container {
+        .l-flipdot-container, .l-flipdot-container-2 {
             margin-top: 20px;
         }
 
@@ -63,6 +63,7 @@
     </div>
     <input id='textInput' value='Hello World!'/>
     <button onclick='sendText()'>Send text</button>
+    <button onclick='sendBigText()'>Send big text</button>
     <br/>
     <input id='speedInput'/>
     <button onclick='sendSpeed()'>Set time per Frame in ms</button>
@@ -71,8 +72,8 @@
 
 <div class='divider'></div>
 
-<div class='l-flipdot-container'>
-</div>
+<div class='l-flipdot-container'></div>
+<div class='l-flipdot-container-2'></div>
 <button onclick='sendPattern()'>Send pattern</button>
 
 <div id='errorDiv'></div>
@@ -89,9 +90,11 @@
         var colsOfDots = 28;
         var rowsOfDots = 7;
         var flipdotContainer = $('.l-flipdot-container');
+        var flipdotContainer2 = $('.l-flipdot-container-2');
 
         for (var i = 0; i < colsOfDots; i++) {
             flipdotContainer.append('<div class="flipdot-col flipdot-col-' + i + '"></div>');
+            flipdotContainer2.append('<div class="flipdot-col flipdot-col-' + i + '"></div>');
         }
 
         for (var i = 0; i < rowsOfDots; i++) {
@@ -147,6 +150,16 @@
 
     function sendText() {
         $.post('api/v1/write/text/' + $('#textInput').val())
+            .done(function (data) {
+                console.info('SUCCESS sending text');
+            })
+            .fail(function (error) {
+                handleError(error);
+            });
+    }
+
+    function sendBigText() {
+        $.post('api/v1/write/big/text/' + $('#textInput').val())
             .done(function (data) {
                 console.info('SUCCESS sending text');
             })

@@ -22,6 +22,13 @@ public class FlipdotResource {
             return response;
         }, new JsonTransformer());
 
+
+        post(API_CONTEXT + "/write/big/text/:text", "application/json", (request, response) -> {
+            flipdots.writeBigText(request.params(":text"));
+            response.status(201);
+            return response;
+        }, new JsonTransformer());
+
         post(API_CONTEXT + "/config/time_per_frame/:speed", "application/json", (request, response) -> {
             flipdots.setTimePerFrame(Long.parseLong(request.params(":speed")));
             response.status(201);
