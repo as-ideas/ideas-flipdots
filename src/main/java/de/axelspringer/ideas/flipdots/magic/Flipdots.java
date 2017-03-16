@@ -52,6 +52,10 @@ public class Flipdots {
     private Long timePerFrame = DEFAULT_FRAME_DURATION_IN_MS;
 
     public Flipdots() {
+        for (String portName : SerialPortList.getPortNames()) {
+            LOG.info("Found serial port: " + portName);
+        }
+
         font.put(' ', new Integer[]{0});
         font.put('+', new Integer[]{24, 126, 126, 24, 0});
         font.put('-', new Integer[]{24, 24, 24, 24, 0});
@@ -71,7 +75,7 @@ public class Flipdots {
         font.put('D', new Integer[]{0x3E, 0x22, 0x22, 0x1C});
         font.put('E', new Integer[]{0x3E, 0x2A, 0x2A});
         font.put('F', new Integer[]{0x3E, 0x0A, 0x0A});
-        font.put('G', new Integer[]{0x1C, 0x22, 0x2A, 0x2A});
+        font.put('G', new Integer[]{0x1C, 0x22, 0x2A, 0x3A});
         font.put('H', new Integer[]{0x3E, 0x08, 0x08, 0x3E});
         font.put('I', new Integer[]{0x3E});
         font.put('J', new Integer[]{0x10, 0x20, 0x20, 0x1E});
@@ -80,11 +84,11 @@ public class Flipdots {
         font.put('M', new Integer[]{0x3E, 0x04, 0x08, 0x04, 0x3E});
         font.put('N', new Integer[]{0x3E, 0x04, 0x08, 0x3E});
         font.put('O', new Integer[]{0x1C, 0x22, 0x22, 0x1C});
-        font.put('P', new Integer[]{0x3E, 0x0A, 0x0A, 0x1C, 0x04});
+        font.put('P', new Integer[]{0x3E, 0x0A, 0x0A, 0x04});
         font.put('Q', new Integer[]{0x1C, 0x22, 0x12, 0x2C});
         font.put('R', new Integer[]{0x3E, 0x0A, 0x1A, 0x24});
         font.put('S', new Integer[]{0x24, 0x2A, 0x2A, 0x12});
-        font.put('T', new Integer[]{0x02, 0x3E, 0x02});
+        font.put('T', new Integer[]{0x02, 0x02, 0x3E, 0x02, 0x02});
         font.put('U', new Integer[]{0x1E, 0x20, 0x20, 0x1E});
         font.put('V', new Integer[]{0x06, 0x18, 0x20, 0x18, 0x6});
         font.put('W', new Integer[]{0x1E, 0x20, 0x1E, 0x20, 0x1E});
@@ -118,26 +122,32 @@ public class Flipdots {
         bigFont.put('X', bigFontArray(intA(0, 15, 31, 56, 112, 96, 96, 112, 56, 31, 15, 0), intA(0, 120, 124, 14, 7, 3, 3, 7, 14, 124, 120, 0)));
         bigFont.put('Y', bigFontArray(intA(0, 63, 127, 96, 64, 0, 0, 64, 96, 127, 63, 0), intA(0, 0, 0, 1, 3, 127, 127, 3, 1, 0, 0, 0)));
         bigFont.put('Z', bigFontArray(intA(0, 3, 3, 3, 3, 67, 99, 115, 59, 31, 15, 0), intA(0, 120, 124, 110, 103, 99, 97, 96, 96, 96, 96, 0)));
+
+        new Thread(() -> write(new FlipdotFrame())).start();
     }
 
 
     public void writeBin(String params) {
         LOG.info("Flipdots.writeBin " + params);
-        String[] split = params.split("-");
+        Integer[] values = parseBinaryPatternString(params);
+
+        FlipdotFrame flipdotFrame = new FlipdotFrame();
+        for (int i = 0; i < values.length; i++) {
+            flipdotFrame.appendSimple(values);
+        }
+        write(flipdotFrame);
+    }
+
+    Integer[] parseBinaryPatternString(String params) {
+        String[] split = params.split("_");
         Integer[] values = new Integer[split.length];
         for (int i = 0; i < values.length; i++) {
             values[i] = Integer.valueOf(split[i]);
         }
-
-        FlipdotFrame flipdotFrame = new FlipdotFrame();
-        for (int i = 0; i < split.length; i++) {
-            flipdotFrame.appendSimple(values);
-        }
-        write(flipdotFrame);
-        sleep();
+        return values;
     }
 
-    public void writeText(String params) {
+    public synchronized void writeText(String params) {
         try {
             params = URLDecoder.decode(params, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -147,7 +157,12 @@ public class Flipdots {
 
         List<Integer> data = new ArrayList<>();
         for (char c : params.toUpperCase().toCharArray()) {
-            data.addAll(Arrays.asList(font.get(c)));
+            Integer[] a = font.get(c);
+            if (a != null) {
+                data.addAll(Arrays.asList(a));
+            } else {
+                LOG.warn("Char not found: " + c);
+            }
             data.add(0);
         }
 
@@ -245,10 +260,21 @@ public class Flipdots {
 
     private String portName() {
         String[] portNames = SerialPortList.getPortNames();
-        for (String portName : portNames) {
-            return portName;
+        if (portNames == null || portNames.length == 0) {
+            throw new RuntimeException("No SERIAL PORT was found!");
         }
-        return null;
+        if (portNames != null && portNames.length == 1) {
+            return portNames[0];
+        }
+
+
+        String result = portNames[0];
+        for (String portName : portNames) {
+            if (portName.contains("usbserial")) {
+                result = portName;
+            }
+        }
+        return result;
     }
 
 

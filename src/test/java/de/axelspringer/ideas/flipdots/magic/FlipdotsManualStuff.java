@@ -18,6 +18,15 @@ public class FlipdotsManualStuff {
     }
 
     @Test
+    public void test_bin_parsing() throws Exception {
+        String bin = "0_0_62_0_8_8_8_8_8_8_20_34_65_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0";
+
+        Integer[] result = new Flipdots().parseBinaryPatternString(bin);
+
+
+    }
+
+    @Test
     public void name_write_stuff() throws Exception {
         SerialPort serialPort = new SerialPort("/dev/tty.usbserial-AI03650Y");
         try {

@@ -33,8 +33,8 @@ public class FlipdotFrame {
     }
 
     public void appendSimple(Integer[] values) {
-        for (int i = 0; i <= 28; i++) {
-            frame[2 + i] = values[0];
+        for (int i = 0; i <= 27; i++) {
+            frame[3 + i] = values[i];
         }
     }
 }
