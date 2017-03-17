@@ -1,8 +1,5 @@
 package de.axelspringer.ideas.flipdots.magic;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
-import jssc.SerialPortList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,13 +45,11 @@ public class Flipdots {
 
     private Map<Character, Integer[]> font = new HashMap<>();
     private Map<Character, FlipdotBigByte[]> bigFont = new HashMap<>();
-    private SerialPort serialPort;
     private Long timePerFrame = DEFAULT_FRAME_DURATION_IN_MS;
+    private FlipdotSerialPort flipdotSerialPort;
 
     public Flipdots() {
-        for (String portName : SerialPortList.getPortNames()) {
-            LOG.info("Found serial port: " + portName);
-        }
+        flipdotSerialPort = new FlipdotSerialPort();
 
         font.put(' ', new Integer[]{0});
         font.put('+', new Integer[]{24, 126, 126, 24, 0});
@@ -122,8 +117,6 @@ public class Flipdots {
         bigFont.put('X', bigFontArray(intA(0, 15, 31, 56, 112, 96, 96, 112, 56, 31, 15, 0), intA(0, 120, 124, 14, 7, 3, 3, 7, 14, 124, 120, 0)));
         bigFont.put('Y', bigFontArray(intA(0, 63, 127, 96, 64, 0, 0, 64, 96, 127, 63, 0), intA(0, 0, 0, 1, 3, 127, 127, 3, 1, 0, 0, 0)));
         bigFont.put('Z', bigFontArray(intA(0, 3, 3, 3, 3, 67, 99, 115, 59, 31, 15, 0), intA(0, 120, 124, 110, 103, 99, 97, 96, 96, 96, 96, 0)));
-
-        new Thread(() -> write(new FlipdotFrame())).start();
     }
 
 
@@ -135,7 +128,7 @@ public class Flipdots {
         for (int i = 0; i < values.length; i++) {
             flipdotFrame.appendSimple(values);
         }
-        write(flipdotFrame);
+        flipdotSerialPort.write(flipdotFrame);
     }
 
     Integer[] parseBinaryPatternString(String params) {
@@ -167,12 +160,12 @@ public class Flipdots {
         }
 
         FlipdotFrame flipdotFrame = new FlipdotFrame();
-        write(flipdotFrame);
+        flipdotSerialPort.write(flipdotFrame);
 
         for (Integer oneCol : data) {
             flipdotFrame.shiftLeft();
             flipdotFrame.appendOnLastColumn(oneCol);
-            write(flipdotFrame);
+            flipdotSerialPort.write(flipdotFrame);
             sleep();
         }
 
@@ -198,63 +191,51 @@ public class Flipdots {
             data.add(FlipdotBigByte.SPACE);
         }
 
-        FlipdotBigFrame flipdotFrame = new FlipdotBigFrame();
-        write(flipdotFrame);
+        FlipdotFull2CFrame flipdotFrame = new FlipdotFull2CFrame();
+        flipdotSerialPort.write(flipdotFrame);
 
         for (FlipdotBigByte oneCol : data) {
             flipdotFrame.shiftLeft();
             flipdotFrame.appendOnLastColumn(oneCol);
-            write(flipdotFrame);
+            flipdotSerialPort.write(flipdotFrame);
             sleep();
         }
 
     }
 
-    private void write(FlipdotBigFrame flipdotFrame) {
-        write(flipdotFrame.upperFrame);
-        write(flipdotFrame.lowerFrame);
 
-    }
-
-    private void write(FlipdotFrame flipdotFrame) {
+    public void writeBigTextOnlyLeft(String params) {
         try {
-            boolean result = getSerialPort().writeIntArray(flipdotFrame.getFrame());
-            if (!result) {
-                LOG.warn("Error on writing frame!");
-            }
-        } catch (SerialPortException e) {
+            params = URLDecoder.decode(params, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-    }
+        LOG.info("Flipdots.writeBigText " + params);
 
-
-    public void close() {
-        if (serialPort != null) {
-            try {
-                serialPort.closePort();
-            } catch (Exception e) {
-                e.printStackTrace();
+        List<FlipdotBigByte> data = new ArrayList<>();
+        for (char c : params.toUpperCase().toCharArray()) {
+            FlipdotBigByte[] a = bigFont.get(c);
+            if (a != null) {
+                data.addAll(Arrays.asList(a));
+            } else {
+                LOG.warn("Char not found: " + c);
             }
+
+            data.add(FlipdotBigByte.SPACE);
         }
+
+        FlipdotBigFrame flipdotFrame = new FlipdotBigFrame();
+        flipdotSerialPort.write(flipdotFrame);
+
+        for (FlipdotBigByte oneCol : data) {
+            flipdotFrame.shiftLeft();
+            flipdotFrame.appendOnLastColumn(oneCol);
+            flipdotSerialPort.write(flipdotFrame);
+            sleep();
+        }
+
     }
 
-    private SerialPort getSerialPort() {
-        if (serialPort == null) {
-            serialPort = new SerialPort(portName());
-            try {
-                serialPort.openPort();//Open serial port
-                //Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
-                serialPort.setParams(SerialPort.BAUDRATE_9600,
-                        SerialPort.DATABITS_8,
-                        SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
-                sleep();
-            } catch (SerialPortException e) {
-                e.printStackTrace();
-            }
-        }
-        return serialPort;
-    }
 
     private void sleep() {
         try {
@@ -264,27 +245,9 @@ public class Flipdots {
         }
     }
 
-    private String portName() {
-        String[] portNames = SerialPortList.getPortNames();
-        if (portNames == null || portNames.length == 0) {
-            throw new RuntimeException("No SERIAL PORT was found!");
-        }
-        if (portNames != null && portNames.length == 1) {
-            return portNames[0];
-        }
-
-
-        String result = portNames[0];
-        for (String portName : portNames) {
-            if (portName.contains("usbserial")) {
-                result = portName;
-            }
-        }
-        return result;
-    }
-
 
     public void setTimePerFrame(long i) {
+        LOG.info("Setting time to ms: " + i);
         this.timePerFrame = i;
     }
 
@@ -303,5 +266,14 @@ public class Flipdots {
 
     private int[] intA(int... values) {
         return values;
+    }
+
+
+    public void close() {
+        flipdotSerialPort.close();
+    }
+
+    public void clearAll() {
+        flipdotSerialPort.write(new FlipdotFull2CFrame());
     }
 }

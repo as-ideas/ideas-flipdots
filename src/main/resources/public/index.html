@@ -65,6 +65,8 @@
     <button onclick='sendText()'>Send text</button>
     <button onclick='sendBigText()'>Send big text</button>
     <br/>
+    <button onclick='clearText()'>Clear</button>
+    <br/>
     <input id='speedInput'/>
     <button onclick='sendSpeed()'>Set time per Frame in ms</button>
 
@@ -153,7 +155,15 @@
                 handleError(error);
             });
     }
-
+    function clearText() {
+        $.post('api/v1/write/clear')
+            .done(function (data) {
+                console.info('SUCCESS sending text');
+            })
+            .fail(function (error) {
+                handleError(error);
+            });
+    }
     function sendBigText() {
         $.post('api/v1/write/big/text/' + $('#textInput').val())
             .done(function (data) {

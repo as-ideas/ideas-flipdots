@@ -8,6 +8,7 @@ import org.junit.Test;
 
 public class FlipdotsManualStuff {
 
+
     @Test
     public void listSerialPorts() throws Exception {
         String[] portNames = SerialPortList.getPortNames();
@@ -60,6 +61,18 @@ public class FlipdotsManualStuff {
             flipdots.writeText("Hallo bei AS ideas engineering der besten firma der welt und viel spass heute                     ");
         }
     }
+
+//    @Test
+//    public void name_writeImage() throws Exception {
+//        Flipdots flipdots = new Flipdots();
+//        Thread.sleep(3000);
+//
+//        // FIXME Remove System.out
+//        System.out.println("FlipdotsManualStuff.name_writeImage");
+//        flipdots.writeFullFrame(ImageReader.readImage("example.png"));
+//        Thread.sleep(3000);
+//
+//    }
 
 
 }
