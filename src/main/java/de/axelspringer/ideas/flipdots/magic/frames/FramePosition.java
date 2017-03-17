@@ -2,7 +2,9 @@ package de.axelspringer.ideas.flipdots.magic.frames;
 
 public enum FramePosition {
 
-    ALL(0x00),
+    ALL(0xFF),
+    UPPER(0x00),
+    LOWER(0x00),
     UPPER_LEFT(0x01),
     LOWER_LEFT(0x02),
     UPPER_RIGHT(0x03),

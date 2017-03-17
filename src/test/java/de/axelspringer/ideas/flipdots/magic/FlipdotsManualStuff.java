@@ -2,7 +2,7 @@ package de.axelspringer.ideas.flipdots.magic;
 
 
 import de.axelspringer.ideas.flipdots.magic.font.TextMode;
-import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFrame;
+import de.axelspringer.ideas.flipdots.magic.frames.FlipdotSingleFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FramePosition;
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -42,7 +42,7 @@ public class FlipdotsManualStuff {
 
             Thread.sleep(1000);
 
-            FlipdotFrame flipdotFrame = new FlipdotFrame();
+            FlipdotSingleFrame flipdotFrame = new FlipdotSingleFrame();
             flipdotFrame.appendOnLastColumn(66);
 
             serialPort.writeIntArray(flipdotFrame.getFrame());//Write data to port
@@ -69,10 +69,10 @@ public class FlipdotsManualStuff {
     public void name() throws Exception {
         Flipdots flipdots = new Flipdots();
 
-        flipdots.writeTextToPosition("UpperLeft", FramePosition.UPPER_LEFT);
-        flipdots.writeTextToPosition("LowerLeft", FramePosition.LOWER_LEFT);
-        flipdots.writeTextToPosition("UpperRight", FramePosition.UPPER_RIGHT);
-        flipdots.writeTextToPosition("LowerRight", FramePosition.LOWER_RIGHT);
+        flipdots.writeText("UpperLeft", FramePosition.UPPER_LEFT);
+        flipdots.writeText("LowerLeft", FramePosition.LOWER_LEFT);
+        flipdots.writeText("UpperRight", FramePosition.UPPER_RIGHT);
+        flipdots.writeText("LowerRight", FramePosition.LOWER_RIGHT);
 
         Thread.sleep(3000);
 
@@ -83,26 +83,26 @@ public class FlipdotsManualStuff {
 
         Flipdots flipdots = new Flipdots();
 
-        flipdots.writeTextToPosition("Login:", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
-        flipdots.writeTextToPosition("SignUp:", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
-        flipdots.writeTextToPosition("35.612", FramePosition.UPPER_RIGHT, TextMode.RIGHT_ALIGN);
-        flipdots.writeTextToPosition("1.234", FramePosition.LOWER_RIGHT, TextMode.RIGHT_ALIGN);
+        flipdots.writeText("Login:", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
+        flipdots.writeText("SignUp:", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
+        flipdots.writeText("35.612", FramePosition.UPPER_RIGHT, TextMode.RIGHT_ALIGN);
+        flipdots.writeText("1.234", FramePosition.LOWER_RIGHT, TextMode.RIGHT_ALIGN);
 
         Thread.sleep(3000);
     }
 
 
-    //    @Test
-//    public void name_writeImage() throws Exception {
-//        Flipdots flipdots = new Flipdots();
-//        Thread.sleep(3000);
-//
-//        // FIXME Remove System.out
-//        System.out.println("FlipdotsManualStuff.name_writeImage");
-//        flipdots.writeFullFrame(ImageReader.readImage("example.png"));
-//        Thread.sleep(3000);
-//
-//    }
+    @Test
+    public void name_writeImage() throws Exception {
+        Flipdots flipdots = new Flipdots();
+        Thread.sleep(3000);
+
+        // FIXME Remove System.out
+        System.out.println("FlipdotsManualStuff.name_writeImage");
+        flipdots.write(ImageReader.readImage("example.png"));
+        Thread.sleep(3000);
+
+    }
 
 
 }

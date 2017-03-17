@@ -67,6 +67,8 @@
     <button onclick='sendBigText()'>Send big text</button>
     <select id="pos" name="position">
         <option>ALL</option>
+        <option>UPPER</option>
+        <option>LOWER</option>
         <option>UPPER_LEFT</option>
         <option>LOWER_LEFT</option>
         <option>UPPER_RIGHT</option>
@@ -171,7 +173,7 @@
             });
     }
     function clearText() {
-        var pos = $('#textInput').val();
+        var pos = $('#pos').val();
 
         $.post('api/v1/write/clear/position/' + pos)
             .done(function (data) {

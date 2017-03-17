@@ -25,7 +25,7 @@ public class FlipdotResource {
         post(API_CONTEXT + "/write/text/:text/mode/:mode/position/:pos", "application/json", (request, response) -> {
             try {
                 String text = URLDecoder.decode(request.params(":text"), "UTF-8");
-                flipdots.writeTextToPosition(text, FramePosition.valueOf(request.params(":pos")), TextMode.valueOf(request.params(":mode")));
+                flipdots.writeText(text, FramePosition.valueOf(request.params(":pos")), TextMode.valueOf(request.params(":mode")));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e.getMessage(), e);
             }
@@ -57,6 +57,12 @@ public class FlipdotResource {
 
         post(API_CONTEXT + "/write/clear", "application/json", (request, response) -> {
             flipdots.clearAll();
+            response.status(201);
+            return response;
+        }, new JsonTransformer());
+
+        post(API_CONTEXT + "/write/clear/position/:pos", "application/json", (request, response) -> {
+            flipdots.clear( FramePosition.valueOf(request.params(":pos")));
             response.status(201);
             return response;
         }, new JsonTransformer());

@@ -3,6 +3,7 @@ package de.axelspringer.ideas.flipdots.magic;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotBigFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFull2CFrame;
+import de.axelspringer.ideas.flipdots.magic.frames.FlipdotSingleFrame;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -20,10 +21,10 @@ public class FlipdotSerialPort {
         }
 
         new Thread(() -> {
-            write(FlipdotFrame.forAddress(0x01));
-            write(FlipdotFrame.forAddress(0x02));
-            write(FlipdotFrame.forAddress(0x03));
-            write(FlipdotFrame.forAddress(0x04));
+            write(FlipdotSingleFrame.forAddress(0x01));
+            write(FlipdotSingleFrame.forAddress(0x02));
+            write(FlipdotSingleFrame.forAddress(0x03));
+            write(FlipdotSingleFrame.forAddress(0x04));
         }).start();
     }
 
@@ -58,7 +59,7 @@ public class FlipdotSerialPort {
         write(flipdotFrame.lowerFrame);
     }
 
-    public void write(FlipdotFrame flipdotFrame) {
+    public void write(FlipdotSingleFrame flipdotFrame) {
         write(flipdotFrame.getFrame());
     }
 
