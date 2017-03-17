@@ -1,4 +1,4 @@
-package de.axelspringer.ideas.flipdots.magic;
+package de.axelspringer.ideas.flipdots.magic.frames;
 
 public class FlipdotBigFrame {
 

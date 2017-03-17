@@ -1,5 +1,7 @@
 package de.axelspringer.ideas.flipdots.magic;
 
+import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFull2CFrame;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 

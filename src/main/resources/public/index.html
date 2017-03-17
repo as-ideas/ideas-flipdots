@@ -62,10 +62,24 @@
         <h1>Flipdots</h1>
     </div>
     <input id='textInput' value='Hello World!'/>
+    <br/>
     <button onclick='sendText()'>Send text</button>
     <button onclick='sendBigText()'>Send big text</button>
-    <br/>
+    <select id="pos" name="position">
+        <option>ALL</option>
+        <option>UPPER_LEFT</option>
+        <option>LOWER_LEFT</option>
+        <option>UPPER_RIGHT</option>
+        <option>LOWER_RIGHT</option>
+    </select>
+    <select id="mode" name="mode">
+        <option>FLOATING_RIGHT_TO_LEFT</option>
+        <option>FLOATING_LEFT_TO_RIGHT</option>
+        <option>LEFT_ALIGN</option>
+        <option>RIGHT_ALIGN</option>
+    </select>
     <button onclick='clearText()'>Clear</button>
+    <br/>
     <br/>
     <input id='speedInput'/>
     <button onclick='sendSpeed()'>Set time per Frame in ms</button>
@@ -75,7 +89,6 @@
 <div class='divider'></div>
 
 <div class='l-flipdot-container'></div>
-<div class='l-flipdot-container-2'></div>
 <button onclick='sendPattern()'>Send pattern</button>
 
 <div id='errorDiv'></div>
@@ -88,11 +101,9 @@
         var colsOfDots = 28;
         var rowsOfDots = 7;
         var flipdotContainer = $('.l-flipdot-container');
-        var flipdotContainer2 = $('.l-flipdot-container-2');
 
         for (var i = 0; i < colsOfDots; i++) {
             flipdotContainer.append('<div class="flipdot-col flipdot-col-' + i + '"></div>');
-            flipdotContainer2.append('<div class="flipdot-col flipdot-col-' + i + '"></div>');
         }
 
         for (var i = 0; i < rowsOfDots; i++) {
@@ -147,7 +158,11 @@
     }
 
     function sendText() {
-        $.post('api/v1/write/text/' + $('#textInput').val())
+        var text = $('#textInput').val();
+        var mode = $('#mode').val();
+        var pos = $('#pos').val();
+
+        $.post('api/v1/write/text/' + text + '/mode/' + mode + "/position/" + pos)
             .done(function (data) {
                 console.info('SUCCESS sending text');
             })
@@ -156,7 +171,9 @@
             });
     }
     function clearText() {
-        $.post('api/v1/write/clear')
+        var pos = $('#textInput').val();
+
+        $.post('api/v1/write/clear/position/' + pos)
             .done(function (data) {
                 console.info('SUCCESS sending text');
             })

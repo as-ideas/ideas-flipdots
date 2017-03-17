@@ -1,5 +1,8 @@
 package de.axelspringer.ideas.flipdots.magic;
 
+import de.axelspringer.ideas.flipdots.magic.frames.FlipdotBigFrame;
+import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFrame;
+import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFull2CFrame;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -79,14 +82,6 @@ public class FlipdotSerialPort {
                 e.printStackTrace();
             }
         }
-    }
-
-
-    public void writeFullFrame(FlipdotFull2CFrame frame) {
-        write(frame.upperLeftFrame);
-        write(frame.lowerLeftFrame);
-        write(frame.upperRightFrame);
-        write(frame.lowerRightFrame);
     }
 
     private String portName() {

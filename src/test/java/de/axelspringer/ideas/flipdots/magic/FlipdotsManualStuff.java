@@ -1,6 +1,9 @@
 package de.axelspringer.ideas.flipdots.magic;
 
 
+import de.axelspringer.ideas.flipdots.magic.font.TextMode;
+import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFrame;
+import de.axelspringer.ideas.flipdots.magic.frames.FramePosition;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -62,7 +65,34 @@ public class FlipdotsManualStuff {
         }
     }
 
-//    @Test
+    @Test
+    public void name() throws Exception {
+        Flipdots flipdots = new Flipdots();
+
+        flipdots.writeTextToPosition("UpperLeft", FramePosition.UPPER_LEFT);
+        flipdots.writeTextToPosition("LowerLeft", FramePosition.LOWER_LEFT);
+        flipdots.writeTextToPosition("UpperRight", FramePosition.UPPER_RIGHT);
+        flipdots.writeTextToPosition("LowerRight", FramePosition.LOWER_RIGHT);
+
+        Thread.sleep(3000);
+
+    }
+
+    @Test
+    public void name2() throws Exception {
+
+        Flipdots flipdots = new Flipdots();
+
+        flipdots.writeTextToPosition("Login:", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
+        flipdots.writeTextToPosition("SignUp:", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
+        flipdots.writeTextToPosition("35.612", FramePosition.UPPER_RIGHT, TextMode.RIGHT_ALIGN);
+        flipdots.writeTextToPosition("1.234", FramePosition.LOWER_RIGHT, TextMode.RIGHT_ALIGN);
+
+        Thread.sleep(3000);
+    }
+
+
+    //    @Test
 //    public void name_writeImage() throws Exception {
 //        Flipdots flipdots = new Flipdots();
 //        Thread.sleep(3000);
