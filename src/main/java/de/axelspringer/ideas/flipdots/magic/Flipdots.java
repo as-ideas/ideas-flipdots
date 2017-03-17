@@ -54,16 +54,16 @@ public class Flipdots {
         font.put(' ', new Integer[]{0});
         font.put('+', new Integer[]{24, 126, 126, 24, 0});
         font.put('-', new Integer[]{24, 24, 24, 24, 0});
-        font.put('0', new Integer[]{62, 65, 65, 62, 0});
-        font.put('1', new Integer[]{0, 66, 127, 64, 0});
-        font.put('2', new Integer[]{98, 81, 73, 70, 0});
-        font.put('3', new Integer[]{34, 65, 73, 54, 0});
-        font.put('4', new Integer[]{56, 36, 34, 127, 32});
-        font.put('5', new Integer[]{79, 73, 73, 49, 0});
-        font.put('6', new Integer[]{62, 73, 73, 50, 0});
-        font.put('7', new Integer[]{3, 1, 1, 127, 0});
-        font.put('8', new Integer[]{54, 73, 73, 54, 0});
-        font.put('9', new Integer[]{38, 73, 73, 62, 0});
+        font.put('0', new Integer[]{62, 34, 62});//62, 65, 65, 62, 0});
+        font.put('1', new Integer[]{62});//0, 66, 127, 64, 0});
+        font.put('2', new Integer[]{58, 42, 46});//98, 81, 73, 70, 0});
+        font.put('3', new Integer[]{34, 42, 62});//34, 65, 73, 54, 0});
+        font.put('4', new Integer[]{14, 8, 62});//56, 36, 34, 127, 32});
+        font.put('5', new Integer[]{46, 42, 58});//79, 73, 73, 49, 0});
+        font.put('6', new Integer[]{62, 42, 58});//62, 73, 73, 50, 0});
+        font.put('7', new Integer[]{ 2,  2, 62}); //3, 1, 1, 127, 0});
+        font.put('8', new Integer[]{62, 42, 62});//54, 73, 73, 54, 0});
+        font.put('9', new Integer[]{46, 42, 62});//38, 73, 73, 62, 0});
         font.put('A', new Integer[]{0x3C, 0x0A, 0x0A, 0x3C});
         font.put('B', new Integer[]{0x3E, 0x2A, 0x2A, 0x14});
         font.put('C', new Integer[]{0x1C, 0x22, 0x22, 0x14});
@@ -118,7 +118,6 @@ public class Flipdots {
         bigFont.put('Y', bigFontArray(intA(0, 63, 127, 96, 64, 0, 0, 64, 96, 127, 63, 0), intA(0, 0, 0, 1, 3, 127, 127, 3, 1, 0, 0, 0)));
         bigFont.put('Z', bigFontArray(intA(0, 3, 3, 3, 3, 67, 99, 115, 59, 31, 15, 0), intA(0, 120, 124, 110, 103, 99, 97, 96, 96, 96, 96, 0)));
     }
-
 
     public void writeBin(String params) {
         LOG.info("Flipdots.writeBin " + params);
