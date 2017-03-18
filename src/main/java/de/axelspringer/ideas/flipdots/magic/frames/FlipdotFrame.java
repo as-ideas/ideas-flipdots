@@ -76,7 +76,7 @@ public class FlipdotFrame {
 //        frame[3] = oneCol;
 //    }
 //
-//    public void appendSimple(Integer[] values) {
+//    public void append(Integer[] values) {
 //        for (int i = 0; i <= 27; i++) {
 //            frame[3 + i] = values[i];
 //        }

@@ -80,7 +80,9 @@
         <option>LEFT_ALIGN</option>
         <option>RIGHT_ALIGN</option>
     </select>
+    <button onclick='startDemo()'>Demo</button>
     <button onclick='clearText()'>Clear</button>
+    <button onclick='stop()'>Stop</button>
     <br/>
     <br/>
     <input id='speedInput'/>
@@ -117,9 +119,13 @@
         $('.flipdot').click(invertDot);
     });
 
-    function handleError(error) {
+    var handleError = function (error) {
         $('#errorDiv').append('<div>' + JSON.stringify(error) + '</div>');
-    }
+    };
+
+    var handleDone = function (data) {
+        console.info("SUCCESS");
+    };
 
     function hexValue(integerValue) {
         var temp = integerValue.toString(16);
@@ -165,53 +171,48 @@
         var pos = $('#pos').val();
 
         $.post('api/v1/write/text/' + text + '/mode/' + mode + "/position/" + pos)
-            .done(function (data) {
-                console.info('SUCCESS sending text');
-            })
-            .fail(function (error) {
-                handleError(error);
-            });
+            .done(handleDone)
+            .fail(handleError);
+    }
+    function stop() {
+        $.post('api/v1/stop')
+            .done(handleDone)
+            .fail(handleError);
     }
     function clearText() {
         var pos = $('#pos').val();
 
         $.post('api/v1/write/clear/position/' + pos)
-            .done(function (data) {
-                console.info('SUCCESS sending text');
-            })
-            .fail(function (error) {
-                handleError(error);
-            });
+            .done(handleDone)
+            .fail(handleError);
     }
+
+    function startDemo() {
+        $.post('api/v1/demo/start')
+            .done(handleDone)
+            .fail(handleError);
+    }
+
+
     function sendBigText() {
         $.post('api/v1/write/big/text/' + $('#textInput').val())
-            .done(function (data) {
-                console.info('SUCCESS sending text');
-            })
-            .fail(function (error) {
-                handleError(error);
-            });
+            .done(handleDone)
+            .fail(handleError);
     }
 
     function sendSpeed() {
         $.post('api/v1/config/time_per_frame/' + $('#speedInput').val())
-            .done(function (data) {
-                console.info('SUCCESS setting speed');
-            })
-            .fail(function (error) {
-                handleError(error);
-            });
+            .done(handleDone)
+            .fail(handleError);
     }
 
 
     function sendPattern() {
-        $.post('api/v1/write/bin/' + getEncodedPattern())
-            .done(function (data) {
-                console.info('SUCCESS');
-            })
-            .fail(function (error) {
-                handleError(error);
-            });
+        var pos = $('#pos').val();
+
+        $.post('api/v1/write/bin/' + getEncodedPattern() + "/position/" + pos)
+            .done(handleDone)
+            .fail(handleError);
     }
 </script>
 </html>

@@ -1,7 +1,6 @@
 package de.axelspringer.ideas.flipdots.magic;
 
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotBigFrame;
-import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFull2CFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotSingleFrame;
 import jssc.SerialPort;
@@ -68,6 +67,7 @@ public class FlipdotSerialPort {
             boolean result = getSerialPort().writeIntArray(flipdotFrame);
             if (!result) {
                 LOG.warn("Error on writing frame!");
+                serialPort = null;
             }
         } catch (SerialPortException e) {
             e.printStackTrace();
@@ -90,7 +90,7 @@ public class FlipdotSerialPort {
         if (portNames == null || portNames.length == 0) {
             throw new RuntimeException("No SERIAL PORT was found!");
         }
-        if (portNames != null && portNames.length == 1) {
+        if (portNames.length == 1) {
             return portNames[0];
         }
 

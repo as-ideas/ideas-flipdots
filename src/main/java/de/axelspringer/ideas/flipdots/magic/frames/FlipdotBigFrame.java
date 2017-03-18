@@ -21,7 +21,7 @@ public class FlipdotBigFrame extends FlipdotFrame {
 //        lowerFrame.appendOnLastColumn(oneCol.lower);
 //    }
 //
-//    public void appendSimple(Integer[] values) {
+//    public void append(Integer[] values) {
 //        for (int i = 0; i <= 28; i++) {
 //            frame[2 + i] = values[0];
 //        }

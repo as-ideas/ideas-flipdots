@@ -1,4 +1,4 @@
-package de.axelspringer.ideas.flipdots.magic;
+package de.axelspringer.ideas.flipdots.magic.image;
 
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFull2CFrame;
 

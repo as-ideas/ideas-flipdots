@@ -7,6 +7,7 @@ import de.axelspringer.ideas.flipdots.magic.frames.FlipdotBigByte;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotFull2CFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotSingleFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FramePosition;
+import de.axelspringer.ideas.flipdots.magic.metrics.Datadog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,27 +20,26 @@ import java.util.concurrent.TimeUnit;
 public class Flipdots {
 
     private static final Logger LOG = LoggerFactory.getLogger(Flipdots.class);
-    private static final long DEFAULT_FRAME_DURATION_IN_MS = TimeUnit.MILLISECONDS.toMillis(280);
+    private static final long DEFAULT_FRAME_DURATION_IN_MS = TimeUnit.MILLISECONDS.toMillis(250);
 
     private FlipdotsSmallFont font = new FlipdotsSmallFont();
     private FlipdotsBigFont bigFont = new FlipdotsBigFont();
     private Long timePerFrame = DEFAULT_FRAME_DURATION_IN_MS;
     private FlipdotSerialPort flipdotSerialPort;
 
-    private boolean isRunning = false;
+    private boolean isDemoRunning = false;
 
     public Flipdots() {
         flipdotSerialPort = new FlipdotSerialPort();
     }
 
-
-    public void writeBin(String params) {
+    public void writeBin(String params, FramePosition framePosition) {
         LOG.info("Flipdots.writeBin " + params);
         Integer[] values = parseBinaryPatternString(params);
 
-        FlipdotSingleFrame flipdotFrame = new FlipdotSingleFrame();
+        FlipdotSingleFrame flipdotFrame = new FlipdotSingleFrame(framePosition);
         for (int i = 0; i < values.length; i++) {
-            flipdotFrame.appendSimple(values);
+            flipdotFrame.append(values);
         }
         flipdotSerialPort.write(flipdotFrame);
     }
@@ -160,25 +160,47 @@ public class Flipdots {
         flipdotSerialPort.write(new FlipdotFull2CFrame());
     }
 
-    public void demoStart() {
-        FlipdotDemo flipdotDemo = new FlipdotDemo();
-        while (isRunning) {
-
-
-            sleepOneSecond();
-        }
+    public void stop() {
+        isDemoRunning = false;
     }
 
-    private void sleepOneSecond() {
+    public void demoStart() {
+        if (isDemoRunning) {
+            LOG.info("Demo already running.");
+            return;
+        }
+        LOG.info("Demo started.");
+        new Thread(() -> {
+            isDemoRunning = true;
+            Datadog datadog = new Datadog();
+            while (isDemoRunning) {
+
+                setTimePerFrame(DEFAULT_FRAME_DURATION_IN_MS);
+                writeBigText("Axel Springer IT All Hands 20.03.2017                          ");
+                clearAll();
+
+                writeText("Logins", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
+                writeText("Signups", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
+
+                for (int i = 0; i < 10; i++) {
+                    long logins = datadog.numberOfLogins();
+                    long signups = datadog.numberOfSignups();
+                    writeText("" + logins, FramePosition.UPPER_RIGHT, TextMode.RIGHT_ALIGN);
+                    writeText("" + signups, FramePosition.LOWER_RIGHT, TextMode.RIGHT_ALIGN);
+                    sleepSeconds(60);
+                }
+            }
+            LOG.info("Demo stopped.");
+        }).start();
+
+    }
+
+    private void sleepSeconds(int n) {
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(n);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public void demoStop() {
-        isRunning = false;
     }
 
     private void sleep() {
@@ -192,4 +214,6 @@ public class Flipdots {
     public void write(FlipdotFull2CFrame flipdotFull2CFrame) {
         flipdotSerialPort.write(flipdotFull2CFrame);
     }
+
+
 }

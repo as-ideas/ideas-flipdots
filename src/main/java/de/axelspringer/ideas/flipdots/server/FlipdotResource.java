@@ -61,6 +61,13 @@ public class FlipdotResource {
             return response;
         }, new JsonTransformer());
 
+
+        post(API_CONTEXT + "/stop", "application/json", (request, response) -> {
+            flipdots.stop();
+            response.status(201);
+            return response;
+        }, new JsonTransformer());
+
         post(API_CONTEXT + "/write/clear/position/:pos", "application/json", (request, response) -> {
             flipdots.clear( FramePosition.valueOf(request.params(":pos")));
             response.status(201);
@@ -73,12 +80,6 @@ public class FlipdotResource {
             return response;
         }, new JsonTransformer());
 
-        post(API_CONTEXT + "/demo/stop", "application/json", (request, response) -> {
-            flipdots.demoStop();
-            response.status(201);
-            return response;
-        }, new JsonTransformer());
-
         post(API_CONTEXT + "/config/time_per_frame/:speed", "application/json", (request, response) -> {
             flipdots.setTimePerFrame(Long.parseLong(request.params(":speed")));
             response.status(201);
@@ -86,8 +87,8 @@ public class FlipdotResource {
         }, new JsonTransformer());
 
 
-        post(API_CONTEXT + "/write/bin/:bin", "application/json", (request, response) -> {
-            flipdots.writeBin(request.params(":bin"));
+        post(API_CONTEXT + "/write/bin/:bin/position/:pos", "application/json", (request, response) -> {
+            flipdots.writeBin(request.params(":bin"),FramePosition.valueOf(request.params(":pos")));
             response.status(201);
             return response;
         }, new JsonTransformer());

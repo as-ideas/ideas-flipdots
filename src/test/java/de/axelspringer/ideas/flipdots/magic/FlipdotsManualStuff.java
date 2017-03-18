@@ -4,6 +4,7 @@ package de.axelspringer.ideas.flipdots.magic;
 import de.axelspringer.ideas.flipdots.magic.font.TextMode;
 import de.axelspringer.ideas.flipdots.magic.frames.FlipdotSingleFrame;
 import de.axelspringer.ideas.flipdots.magic.frames.FramePosition;
+import de.axelspringer.ideas.flipdots.magic.image.ImageReader;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
