@@ -7,6 +7,13 @@
 > java -jar target/app.jar
 Open localhost:8080
 
+# pcp.properties
+de.axelspringer.ideas.flipdots.datadog.api.key=
+de.axelspringer.ideas.flipdots.datadog.app.key=
+de.axelspringer.ideas.flipdots.datadog.query.logins=
+de.axelspringer.ideas.flipdots.datadog.query.signups=
+
+
 ## Config
 
 | 1 | 3 |
