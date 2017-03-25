@@ -52,6 +52,8 @@ public class Datadog {
     }
 
     private long getLastTimeseriesValue(String url) {
+        LOG.info("URL: " + url);
+
         try {
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
@@ -59,14 +61,20 @@ public class Datadog {
             try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
                 HttpEntity entity = response.getEntity();
                 String resultString = EntityUtils.toString(entity);
+                LOG.info(resultString);
                 if (response.getStatusLine().getStatusCode() > 200) {
                     LOG.warn(resultString);
                     throw new RuntimeException("Could not read answer from TEAM MOOD.");
                 } else {
                     JsonParser jsonParser = new JsonParser();
-                    JsonArray pointList = jsonParser.parse(resultString)
-                            .getAsJsonObject().get("series")
-                            .getAsJsonArray().get(0)
+                    JsonElement series = jsonParser.parse(resultString)
+                            .getAsJsonObject().get("series");
+                    if (series.getAsJsonArray().size() == 0) {
+                        return 0;
+                    }
+
+                    //
+                    JsonArray pointList = series.getAsJsonArray().get(0)
                             .getAsJsonObject().get("pointlist")
                             .getAsJsonArray();
 

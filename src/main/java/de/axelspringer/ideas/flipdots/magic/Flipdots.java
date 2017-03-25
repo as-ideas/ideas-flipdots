@@ -62,7 +62,7 @@ public class Flipdots {
     }
 
     public void writeText(String text, FramePosition framePosition, TextMode textMode) {
-        LOG.info("Flipdots.writeText:  " + text + " on " + framePosition);
+        LOG.info("Flipdots.writeText:  " + text + " on " + framePosition + " with mode " + textMode);
 
         List<Integer> data = new ArrayList<>();
         for (char c : text.toUpperCase().toCharArray()) {
@@ -175,19 +175,19 @@ public class Flipdots {
             Datadog datadog = new Datadog();
             while (isDemoRunning) {
 
-                setTimePerFrame(DEFAULT_FRAME_DURATION_IN_MS);
-                writeBigText("Axel Springer IT All Hands 20.03.2017                          ");
+                setTimePerFrame(140);
+                writeBigText("Axel Springer  IT    All Hands 20.03.2017                          ");
                 clearAll();
 
-                writeText("Logins", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
-                writeText("Signups", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
+                writeText(" Logins", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
+                writeText(" Signups", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
 
                 for (int i = 0; i < 10; i++) {
                     long logins = datadog.numberOfLogins();
                     long signups = datadog.numberOfSignups();
-                    writeText("" + logins, FramePosition.UPPER_RIGHT, TextMode.RIGHT_ALIGN);
-                    writeText("" + signups, FramePosition.LOWER_RIGHT, TextMode.RIGHT_ALIGN);
-                    sleepSeconds(60);
+                    writeText("" + logins, FramePosition.UPPER_RIGHT, TextMode.FLOATING_RIGHT_TO_LEFT);
+                    writeText("" + signups, FramePosition.LOWER_RIGHT, TextMode.FLOATING_RIGHT_TO_LEFT);
+                    sleepSeconds(40);
                 }
             }
             LOG.info("Demo stopped.");
