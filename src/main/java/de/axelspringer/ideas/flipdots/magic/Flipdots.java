@@ -114,7 +114,12 @@ public class Flipdots {
     }
 
     public void writeBigText(String params) {
-        LOG.info("Flipdots.writeBigText " + params);
+        writeBigText(params, TextMode.FLOATING_RIGHT_TO_LEFT);
+    }
+
+
+    public void writeBigText(String params, TextMode textMode) {
+        LOG.info("Flipdots.writeBigText " + params + " in mode " + textMode);
 
         List<FlipdotBigByte> data = new ArrayList<>();
         for (char c : params.toUpperCase().toCharArray()) {
@@ -129,16 +134,32 @@ public class Flipdots {
         }
 
         FlipdotFull2CFrame flipdotFrame = new FlipdotFull2CFrame();
-        flipdotSerialPort.write(flipdotFrame);
 
-        for (FlipdotBigByte oneCol : data) {
-            flipdotFrame.shiftLeft();
-            flipdotFrame.appendOnLastColumn(oneCol);
-            flipdotSerialPort.write(flipdotFrame);
-            sleep();
+        switch (textMode) {
+            case FLOATING_RIGHT_TO_LEFT:
+                flipdotSerialPort.write(flipdotFrame);
+                for (FlipdotBigByte oneCol : data) {
+                    flipdotFrame.shiftLeft();
+                    flipdotFrame.appendOnLastColumn(oneCol);
+                    flipdotSerialPort.write(flipdotFrame);
+                    sleep();
+                }
+                break;
+            case RIGHT_ALIGN:
+                // flipdotSerialPort.write(flipdotFrame);
+                for (int i = 0; i < data.size() - 1; i++) {
+                    FlipdotBigByte oneCol = data.get(i);
+                    flipdotFrame.shiftLeft();
+                    flipdotFrame.appendOnLastColumn(oneCol);
+                }
+                flipdotSerialPort.write(flipdotFrame);
+                break;
+            default:
+                throw new IllegalStateException("Mode not supported: " + textMode);
         }
 
     }
+
 
     public void setTimePerFrame(long i) {
         LOG.info("Setting time to ms: " + i);
@@ -168,6 +189,35 @@ public class Flipdots {
 
 
     public void startTimer(Long timeInSeconds) {
+        if (isDemoRunning) {
+            isDemoRunning = false;
+            sleepSeconds(2);
+        }
+
+        new Thread(() -> {
+            isDemoRunning = true;
+
+            setTimePerFrame(140);
+            clearAll();
+            //writeText(" Logins", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
+            //writeText(" Signups", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
+
+
+            for (int i = 0; i <= timeInSeconds; i++) {
+                if (!isDemoRunning) {
+                    return;
+                }
+                long remainingSeconds = timeInSeconds - i;
+                String secondsString = String.format("%02d:%02d", (remainingSeconds % 3600) / 60, remainingSeconds % 60);
+                writeBigText("Time: " + secondsString, TextMode.RIGHT_ALIGN);
+                sleepSeconds(1);
+            }
+
+            setTimePerFrame(100);
+            writeBigText("END      END      END                    00:00");
+            isDemoRunning = false;
+            LOG.info("Demo stopped.");
+        }).start();
 
     }
 
@@ -198,6 +248,8 @@ public class Flipdots {
                     writeBigText("Time: " + timer.getTimeString());
                     sleepSeconds(245);
                 }
+                isDemoRunning = false;
+
             }
             LOG.info("Demo stopped.");
         }).start();

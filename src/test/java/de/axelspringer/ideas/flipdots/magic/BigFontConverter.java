@@ -14,7 +14,7 @@ public class BigFontConverter {
 // FIXME Remove System.out
         System.out.println(image.getWidth() + " x " + image.getHeight());
 
-        char[] abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        char[] abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789".toCharArray();
 
         for (int i = 0; i < abc.length; i++) {
             char c = abc[i];

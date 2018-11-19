@@ -80,9 +80,9 @@ public class FlipdotResource {
             return response;
         }, new JsonTransformer());
 
-        post(API_CONTEXT + "/config/timer/start/:seconds", "application/json", (request, response) -> {
+        post(API_CONTEXT + "/timer/start/:seconds", "application/json", (request, response) -> {
             Long timeInSeconds = Long.parseLong(request.params(":seconds"));
-
+            flipdots.clearAll();
             flipdots.startTimer(timeInSeconds);
 
             response.status(201);
