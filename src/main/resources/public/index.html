@@ -87,13 +87,29 @@
     <br/>
     <input id='speedInput'/>
     <button onclick='sendSpeed()'>Set time per Frame in ms</button>
-
+    <br/>
 </div>
 
 <div class='divider'></div>
 
 <div class='l-flipdot-container'></div>
 <button onclick='sendPattern()'>Send pattern</button>
+
+<br/>
+<br/>
+
+<div class='l-secondary'>
+    <br/>
+    <div>
+        <h3>Timer</h3>
+    </div>
+    <br/>
+    <input id='timerInput'/>
+    <button onclick='sendTimer()'>Start Timer in SECONDS</button>
+    <br/>
+
+</div>
+
 
 <div id='errorDiv'></div>
 </body>
@@ -174,11 +190,20 @@
             .done(handleDone)
             .fail(handleError);
     }
+
+    function sendTimer() {
+        var timerInSeconds = $('#timerInput').val();
+        $.post('api/v1/timer/start/' + timerInSeconds)
+            .done(handleDone)
+            .fail(handleError);
+    }
+
     function stop() {
         $.post('api/v1/stop')
             .done(handleDone)
             .fail(handleError);
     }
+
     function clearText() {
         var pos = $('#pos').val();
 

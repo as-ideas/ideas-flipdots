@@ -13,12 +13,12 @@ public class FlipdotFull2CFrame extends FlipdotFrame {
     }
 
     public void shiftLeft() {
-        upperLeftFrame[30] = upperRightFrame[3];
-        lowerLeftFrame[30] = lowerRightFrame[3];
-        for (int i = 3; i <= 29; i++) {
+        upperLeftFrame[31] = upperRightFrame[3];
+        lowerLeftFrame[31] = lowerRightFrame[3];
+        for (int i = 3; i <= 30; i++) {
             upperLeftFrame[i] = upperLeftFrame[i + 1];
         }
-        for (int i = 3; i <= 29; i++) {
+        for (int i = 3; i <= 30; i++) {
             lowerLeftFrame[i] = lowerLeftFrame[i + 1];
         }
         for (int i = 3; i <= 29; i++) {

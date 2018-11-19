@@ -5,6 +5,8 @@ import java.util.HashMap;
 public class FlipdotsSmallFont extends HashMap<Character, Integer[]> {
 
     public FlipdotsSmallFont() {
+        this.put('.', new Integer[]{32});
+        this.put(':', new Integer[]{20});
         this.put(' ', new Integer[]{0});
         this.put('+', new Integer[]{24, 126, 126, 24, 0});
         this.put('-', new Integer[]{24, 24, 24, 24, 0});

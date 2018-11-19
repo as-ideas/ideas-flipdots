@@ -164,6 +164,11 @@ public class Flipdots {
         isDemoRunning = false;
     }
 
+
+    public void startTimer(Long timeInSeconds) {
+
+    }
+
     public void demoStart() {
         if (isDemoRunning) {
             LOG.info("Demo already running.");
