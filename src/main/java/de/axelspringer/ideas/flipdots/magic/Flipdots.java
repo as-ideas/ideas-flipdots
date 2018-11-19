@@ -1,5 +1,6 @@
 package de.axelspringer.ideas.flipdots.magic;
 
+import de.axelspringer.ideas.flipdots.Timer;
 import de.axelspringer.ideas.flipdots.magic.font.FlipdotsBigFont;
 import de.axelspringer.ideas.flipdots.magic.font.FlipdotsSmallFont;
 import de.axelspringer.ideas.flipdots.magic.font.TextMode;
@@ -28,6 +29,7 @@ public class Flipdots {
     private FlipdotSerialPort flipdotSerialPort;
 
     private boolean isDemoRunning = false;
+    private Timer timer = new Timer();
 
     public Flipdots() {
         flipdotSerialPort = new FlipdotSerialPort();
@@ -181,18 +183,20 @@ public class Flipdots {
             while (isDemoRunning) {
 
                 setTimePerFrame(140);
-                writeBigText("Axel Springer  IT    All Hands 20.03.2017                          ");
+                writeBigText("Axel Springer Ideas Engineering              ");
                 clearAll();
 
-                writeText(" Logins", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
-                writeText(" Signups", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
+                //writeText(" Logins", FramePosition.UPPER_LEFT, TextMode.LEFT_ALIGN);
+                //writeText(" Signups", FramePosition.LOWER_LEFT, TextMode.LEFT_ALIGN);
 
-                for (int i = 0; i < 10; i++) {
-                    long logins = datadog.numberOfLogins();
-                    long signups = datadog.numberOfSignups();
-                    writeText("" + logins, FramePosition.UPPER_RIGHT, TextMode.FLOATING_RIGHT_TO_LEFT);
-                    writeText("" + signups, FramePosition.LOWER_RIGHT, TextMode.FLOATING_RIGHT_TO_LEFT);
-                    sleepSeconds(40);
+
+                for (int i = 0; i < 240; i++) {
+//                    long logins = datadog.numberOfLogins();
+//                    long signups = datadog.numberOfSignups();
+//                    writeText("" + logins, FramePosition.UPPER_RIGHT, TextMode.FLOATING_RIGHT_TO_LEFT);
+//                    writeText("" + signups, FramePosition.LOWER_RIGHT, TextMode.FLOATING_RIGHT_TO_LEFT);
+                    writeBigText("Time: " + timer.getTimeString());
+                    sleepSeconds(245);
                 }
             }
             LOG.info("Demo stopped.");
